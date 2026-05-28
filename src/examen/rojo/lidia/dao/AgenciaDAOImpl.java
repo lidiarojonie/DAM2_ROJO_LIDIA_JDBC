@@ -170,57 +170,40 @@ public class AgenciaDAOImpl
             ResultSet rs =
                     motorSQL.executeQuery();
             if(rs.next()){
-
-                agencia =
-                        mapAgencia(rs);
+                agencia = mapAgencia(rs);
             }
 
         }catch (Exception e){
-
             printError(e);
 
         }finally {
-
             motorSQL.close();
         }
-
         return agencia;
     }
 
     @Override
     public ArrayList<Agencia> findAll() {
 
-        ArrayList<Agencia> agencias =
-                new ArrayList<>();
+        ArrayList<Agencia> agencias = new ArrayList<>();
 
         try{
-
             motorSQL.connect();
-
             motorSQL.prepare(SQL_FIND_ALL);
 
-            ResultSet rs =
-                    motorSQL.executeQuery();
+            ResultSet rs = motorSQL.executeQuery();
 
             while(rs.next()){
-
-                agencias.add(
-                        mapAgencia(rs));
+                agencias.add(mapAgencia(rs));
             }
 
         }catch (Exception e){
-
             printError(e);
-
         }finally {
-
             motorSQL.close();
         }
-
         return agencias;
     }
-
-
 
     /*
      * =========================
@@ -228,26 +211,18 @@ public class AgenciaDAOImpl
      * =========================
      */
 
-    private Agencia mapAgencia(
-            ResultSet rs)
-            throws Exception {
+    private Agencia mapAgencia(ResultSet rs)
+        throws Exception {
 
-            Agencia pelicula =
-                new Agencia();
+            Agencia pelicula = new Agencia();
 
-        pelicula.setId(
-                rs.getInt("id"));
+            pelicula.setId(rs.getInt("id"));
+            pelicula.setNombre(rs.getString("nombre"));
+            pelicula.setPais(rs.getString("pais"));
 
-        pelicula.setNombre(
-                rs.getString("nombre"));
-
-        pelicula.setPais(
-                rs.getString("pais"));
-
-        return pelicula;
+            return pelicula;
+        }
+    public static void main(String[] args){
+        AgenciaDAOImpl agenciaDAO = new AgenciaDAOImpl(MotorFactory.create(MotorFactory.ORACLE));
     }
-public static void main(String[] args){
-        AgenciaDAOImpl agenciaDAO =
-                new AgenciaDAOImpl(MotorFactory.create(MotorFactory.ORACLE));
-}
 }
