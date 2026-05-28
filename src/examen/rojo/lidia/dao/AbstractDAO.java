@@ -1,4 +1,19 @@
 package src.examen.rojo.lidia.dao;
 
-public class AbstractDAO {
+import java.util.ArrayList;
+
+import src.examen.rojo.lidia.motores.MotorSQL;
+
+public abstract class AbstractDAO<T>
+        implements DAO<T> {
+    protected MotorSQL motorSQL;
+    public AbstractDAO(MotorSQL motorSQL) {
+        this.motorSQL = motorSQL;
+    }
+    protected void printError(Exception e){
+        System.out.println(
+                "[ERROR] " +
+                        e.getMessage());
+    }
+   
 }

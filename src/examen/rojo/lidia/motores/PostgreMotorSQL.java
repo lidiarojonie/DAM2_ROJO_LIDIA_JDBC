@@ -1,4 +1,39 @@
 package src.examen.rojo.lidia.motores;
 
-public class PostgreMotorSQL {
+import java.sql.DriverManager;
+
+public class PostgreMotorSQL extends MotorSQL {
+    private static final String URL =
+            "jdbc:postgresql://rojo-lidia-dam.c4f8hl9bftzu.us-east-1.rds.amazonaws.com:5432/postgres";
+    private static final String USER =
+            "postgres";
+    private static final String PASSWORD =
+            "12345678";
+    private static final String DRIVER =
+            "org.postgresql.Driver";
+    public PostgreMotorSQL(){
+        super(
+                URL,
+                USER,
+                PASSWORD,
+                DRIVER
+        );
+    }
+    @Override
+    public void connect(){
+        try{
+            Class.forName(driver);
+            conn =
+                    DriverManager.getConnection(
+                            url,
+                            user,
+                            password
+                    );
+            System.out.println(
+                    "CONEXIÓN OK");
+        }catch (Exception e){
+            System.out.println(
+                    e.getMessage());
+        }
+    }
 }
