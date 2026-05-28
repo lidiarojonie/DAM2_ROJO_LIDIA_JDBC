@@ -1,6 +1,7 @@
 package src.examen.rojo.lidia.dao;
 
 import src.examen.rojo.lidia.beans.Satelite;
+import src.examen.rojo.lidia.beans.Agencia;
 import src.examen.rojo.lidia.motores.MotorSQL;
 import src.examen.rojo.lidia.motores.MotorFactory;
 
@@ -9,14 +10,15 @@ import java.util.ArrayList;
 
 public class SateliteDAOImpl
         extends AbstractDAO<Satelite> {
-    private static final String SQL_DETALLE_SATELITE =
+    private static final String SQL_FIND_DETALLE_SATELITE =
             "SELECT " +
                     "S.ID, " +
-                    "S.TITULO, " +
-                    "S.DIRECTOR, " +
-                    "S.GENERO, " +
-                    "S.ANYO, " +
-                    "S.DURACION, " +
+                    "S.NOMBRE, " +
+                    "S.ORBITA, " +
+                    "S.PESO, " +
+                    "S.COSTE, " +
+                    "S.ACTIVO, " +
+                    "S.AGENCIA, " +
 
                     "D.ID DETALLE_ID, " +
                     "D.SINOPSIS, " +
@@ -35,53 +37,46 @@ public class SateliteDAOImpl
 
     private static final String SQL_FIND_ALL =
             "SELECT * " +
-                    "FROM peliculas " +
+                    "FROM SATELITES " +
                     "ORDER BY id";
 
     private static final String SQL_FIND =
             "SELECT * " +
-                    "FROM peliculas " +
+                    "FROM SATELITES " +
                     "WHERE id = ?";
 
     private static final String SQL_INSERT =
-            "INSERT INTO peliculas " +
+            "INSERT INTO SATELITES " +
                     "(" +
-                    "titulo, " +
-                    "director, " +
-                    "genero, " +
-                    "anyo, " +
-                    "duracion" +
+                    "nombre, " +
+                    "orbita, " +
+                    "peso, " +
+                    "coste, " +
                     ") " +
                     "VALUES " +
                     "(" +
-                    "?, ?, ?, ?, ?" +
+                    "?, ?, ?, ?" +
                     ")";
 
     private static final String SQL_UPDATE =
-            "UPDATE peliculas " +
+            "UPDATE satelites " +
                     "SET " +
-                    "titulo = ?, " +
-                    "director = ?, " +
-                    "genero = ?, " +
-                    "anyo = ?, " +
-                    "duracion = ? " +
+                    "nombre = ?, " +
+                    "orbita = ?, " +
+                    "peso = ?, " +
+                    "coste = ?, " +
+                    "activo = ? " +
                     "WHERE id = ?";
 
     private static final String SQL_DELETE =
-            "DELETE FROM peliculas " +
+            "DELETE FROM satelites " +
                     "WHERE id = ?";
 
-    private static final String SQL_FIND_BY_GENERO =
+    private static final String SQL_FIND_BY_AGENCIA =
             "SELECT * " +
-                    "FROM peliculas " +
-                    "WHERE genero = ? " +
-                    "ORDER BY titulo";
-
-    private static final String SQL_FIND_BY_DIRECTOR =
-            "SELECT * " +
-                    "FROM peliculas " +
-                    "WHERE director = ? " +
-                    "ORDER BY anyo DESC";
+                    "FROM satelites " +
+                    "WHERE agencia = ? " +
+                    "ORDER BY nombre";
 
 
     public void check() {
@@ -98,7 +93,7 @@ public class SateliteDAOImpl
         }
     }
 
-    public PeliculaDAOImpl(
+    public SateliteDAOImpl(
             MotorSQL motorSQL) {
         super(motorSQL);
     }
@@ -110,15 +105,14 @@ public class SateliteDAOImpl
      */
 
     @Override
-    public void add(Pelicula pelicula) {
+    public void add(Satelite satelite) {
         try{
             motorSQL.connect();
             motorSQL.prepare(SQL_INSERT);
-            motorSQL.getPs().setString(1, pelicula.getTitulo());
-            motorSQL.getPs().setString(2, pelicula.getDirector());
-            motorSQL.getPs().setString(3, pelicula.getGenero());
-            motorSQL.getPs().setInt(4, pelicula.getAnyo());
-            motorSQL.getPs().setInt(5, pelicula.getDuracion());
+            motorSQL.getPs().setString(1, satelite.getNombre());
+            motorSQL.getPs().setString(2, satelite.getOrbita());
+            motorSQL.getPs().setInt(3, satelite.getPeso());
+            motorSQL.getPs().setDouble(4, satelite.getCoste());
 
             int rows = motorSQL.executeUpdate();
             System.out.println(
@@ -138,25 +132,25 @@ public class SateliteDAOImpl
     @Override
     public void update(
             int id,
-            Pelicula pelicula) {
+            Satelite satelite) {
         try{
             motorSQL.connect();
             motorSQL.prepare(SQL_UPDATE);
             motorSQL.getPs().setString(
                     1,
-                    pelicula.getTitulo());
+                    satelite.getNombre());
             motorSQL.getPs().setString(
                     2,
-                    pelicula.getDirector());
-            motorSQL.getPs().setString(
+                    satelite.getOrbita());
+            motorSQL.getPs().setInt(
                     3,
-                    pelicula.getGenero());
-            motorSQL.getPs().setInt(
+                    satelite.getPeso());
+            motorSQL.getPs().setDouble(
                     4,
-                    pelicula.getAnyo());
-            motorSQL.getPs().setInt(
+                    satelite.getCoste());
+            motorSQL.getPs().setBoolean(
                     5,
-                    pelicula.getDuracion());
+                    satelite.isActivo());
             motorSQL.getPs().setInt(
                     6,
                     id);
@@ -415,4 +409,5 @@ public static void main(String[] args){
                 new PeliculaDAOImpl(MotorFactory.
                         create(MotorFactory.ORACLE));
 }
+
 }

@@ -1,5 +1,7 @@
 package src.examen.rojo.lidia.beans;
 
+import java.sql.SQLException;
+
 public class Agencia {
     // ATRIBUTOS
     private int id;
