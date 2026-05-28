@@ -1,6 +1,7 @@
 package src.examen.rojo.lidia.dao;
 
 import src.examen.rojo.lidia.beans.Agencia;
+import src.examen.rojo.lidia.beans.Satelite;
 import src.examen.rojo.lidia.motores.MotorSQL;
 import src.examen.rojo.lidia.motores.MotorFactory;
 
@@ -9,19 +10,6 @@ import java.util.ArrayList;
 
 public class AgenciaDAOImpl
         extends AbstractDAO<Agencia> {
-    private static final String SQL_DETALLE_AGENCIA =
-            "SELECT " +
-                    "A.ID, " +
-                    "A.NOMBRE, " +
-                    "A.PAIS, " +
-                    "A.FECHA_FUNDACION, " +
-                    "A.AUTOR_EXAMEN " +
-
-                    "FROM AGENCIAS A " +
-
-                    "WHERE A.ID = ? " +
-
-                    "ORDER BY A.ID";
 
     private static final String SQL_FIND_ALL =
             "SELECT * " +
@@ -38,8 +26,7 @@ public class AgenciaDAOImpl
                     "(" +
                     "nombre, " +
                     "pais " +
-                    "fecha_fundacion, " +
-                    "autor_examen, " +
+                    "fecha_fundacion " +
                     ") " +
                     "VALUES " +
                     "(" +
@@ -50,9 +37,7 @@ public class AgenciaDAOImpl
             "UPDATE AGENCIAS " +
                     "SET " +
                     "nombre = ?, " +
-                    "pais = ?, " +
-                    "fecha_fundacion = ?, " +
-                    "autor_examen = ?, " +
+                    "pais = ? " +
                     "WHERE id = ?";
 
     private static final String SQL_DELETE =
@@ -119,7 +104,7 @@ public class AgenciaDAOImpl
                     agencia.getNombre());
             motorSQL.getPs().setString(
                     2,
-                    agencia.getPais());
+                    agencia.getPais());  
             motorSQL.getPs().setInt(
                     3,
                     id);
@@ -222,7 +207,23 @@ public class AgenciaDAOImpl
 
             return pelicula;
         }
+
     public static void main(String[] args){
         AgenciaDAOImpl agenciaDAO = new AgenciaDAOImpl(MotorFactory.create(MotorFactory.ORACLE));
+    }
+
+
+
+    
+    @Override
+    public ArrayList<Agencia> findByAgencia(String agencia) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByAgencia'");
+    }
+
+    @Override
+    public Satelite findDetalleSatelite(int idSatelite) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findDetalleSatelite'");
     }
 }

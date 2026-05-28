@@ -2,7 +2,6 @@ package src.examen.rojo.lidia.dao;
 
 import java.util.ArrayList;
 
-import src.examen.rojo.lidia.beans.Agencia;
 import src.examen.rojo.lidia.beans.Satelite;
 import src.examen.rojo.lidia.motores.MotorSQL;
 
@@ -19,5 +18,5 @@ public abstract class AbstractDAO<T>
     }
    
     public abstract ArrayList<T> findByAgencia(String agencia);
-    public abstract Satelite findDetallePeliculaByPelicula(int idSatelite);
+    public abstract Satelite findDetalleSatelite(int idSatelite);
 }

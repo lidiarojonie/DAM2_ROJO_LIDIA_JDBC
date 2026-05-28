@@ -1,7 +1,6 @@
 package src.examen.rojo.lidia.dao;
 
 import src.examen.rojo.lidia.beans.Satelite;
-import src.examen.rojo.lidia.beans.Agencia;
 import src.examen.rojo.lidia.motores.MotorSQL;
 import src.examen.rojo.lidia.motores.MotorFactory;
 
@@ -20,11 +19,10 @@ public class SateliteDAOImpl
                     "S.ACTIVO, " +
                     "S.AGENCIA, " +
 
-                    "D.ID DETALLE_ID, " +
-                    "D.SINOPSIS, " +
-                    "D.PRESUPUESTO, " +
-                    "D.RECAUDACION, " +
-                    "D.IDIOMA_ORIGINAL " +
+                    "D.ID, " +
+                    "D.VELOCIDAD_MAXIMA, " +
+                    "D.COMBUSTIBLE, " +
+                    "D.DIAS_VIDA_UTIL " +
 
                     "FROM SATELITES S " +
 
@@ -170,11 +168,8 @@ public class SateliteDAOImpl
     public void delete(int id) {
 
         try{
-
             motorSQL.connect();
-
             motorSQL.prepare(SQL_DELETE);
-
             motorSQL.getPs().setInt(
                     1,
                     id);
@@ -187,19 +182,16 @@ public class SateliteDAOImpl
                             rows);
 
         }catch (Exception e){
-
             printError(e);
-
         }finally {
-
             motorSQL.close();
         }
     }
 
     @Override
-    public Pelicula find(int id) {
+    public Satelite find(int id) {
 
-        Pelicula pelicula = null;
+        Satelite satelite = null;
 
         try{
             motorSQL.connect();
@@ -211,53 +203,44 @@ public class SateliteDAOImpl
                     motorSQL.executeQuery();
             if(rs.next()){
 
-                pelicula =
-                        mapPelicula(rs);
+                satelite =
+                        mapSatelite(rs);
             }
 
         }catch (Exception e){
-
             printError(e);
-
         }finally {
-
             motorSQL.close();
         }
 
-        return pelicula;
+        return satelite;
     }
 
     @Override
-    public ArrayList<Pelicula> findAll() {
+    public ArrayList<Satelite> findAll() {
 
-        ArrayList<Pelicula> peliculas =
+        ArrayList<Satelite> satelites =
                 new ArrayList<>();
 
         try{
-
             motorSQL.connect();
-
             motorSQL.prepare(SQL_FIND_ALL);
-
             ResultSet rs =
                     motorSQL.executeQuery();
 
             while(rs.next()){
 
-                peliculas.add(
-                        mapPelicula(rs));
+                satelites.add(
+                        mapSatelite(rs));
             }
 
         }catch (Exception e){
-
             printError(e);
-
         }finally {
-
             motorSQL.close();
         }
 
-        return peliculas;
+        return satelites;
     }
 
     /*
@@ -267,21 +250,19 @@ public class SateliteDAOImpl
      */
 
     @Override
-    public ArrayList<Pelicula> findByGenero(String genero) {
+    public ArrayList<Satelite> findByAgencia(String agencia) {
 
-        ArrayList<Pelicula> peliculas =
+        ArrayList<Satelite> peliculas =
                 new ArrayList<>();
 
         try{
-
             motorSQL.connect();
-
             motorSQL.prepare(
-                    SQL_FIND_BY_GENERO);
+                    SQL_FIND_BY_AGENCIA);
 
             motorSQL.getPs().setString(
                     1,
-                    genero);
+                    agencia);
 
             ResultSet rs =
                     motorSQL.executeQuery();
@@ -289,86 +270,52 @@ public class SateliteDAOImpl
             while(rs.next()){
 
                 peliculas.add(
-                        mapPelicula(rs));
+                        mapSatelite(rs));
             }
 
-        }catch (Exception e){
-
-            printError(e);
-
-        }finally {
-
-            motorSQL.close();
-        }
-
-        return peliculas;
-    }
-
-    @Override
-    public ArrayList<Pelicula> findByDirector(String director) {
-
-        ArrayList<Pelicula> peliculas =
-                new ArrayList<>();
-        try{
-            motorSQL.connect();
-            motorSQL.prepare(
-                    SQL_FIND_BY_DIRECTOR);
-            motorSQL.getPs().setString(
-                    1,
-                    director);
-            ResultSet rs =
-                    motorSQL.executeQuery();
-            while(rs.next()){
-                peliculas.add(
-                        mapPelicula(rs));
-            }
         }catch (Exception e){
             printError(e);
         }finally {
             motorSQL.close();
         }
-
         return peliculas;
     }
 
     @Override
-    public Pelicula findDetallePeliculaByPelicula(int idPelicula) {
-        Pelicula pelicula = new Pelicula();
+    public Satelite findDetalleSatelite(int id) {
+        Satelite satelite = new Satelite();
         try{
             motorSQL.connect();
             motorSQL.prepare(
-                    SQL_DETALLE_PELICULA);
+                SQL_FIND_DETALLE_SATELITE);
             motorSQL.getPs().setInt(
                     1,
-                    idPelicula);
+                    id);
             ResultSet rs =
                     motorSQL.executeQuery();
             if(rs.next()){
-                    pelicula.setId(rs.getInt(1));
-                    pelicula.setTitulo(rs.getString(2));
-                    pelicula.setDirector(rs.getString(3));
-                    pelicula.setGenero(rs.getString(4));
-                    pelicula.setAnyo(rs.getInt(5));
-                    pelicula.setDuracion(rs.getInt(6));
+                    satelite.setId(rs.getInt(1));
+                    satelite.setNombre(rs.getString(2));
+                    satelite.setOrbita(rs.getString(3));
+                    satelite.setPeso(rs.getInt(4));
+                    satelite.setCoste(rs.getDouble(5));
+                    satelite.setActivo(rs.getBoolean(6));
 
-                    pelicula.getDetallePelicula().
-                            setId(rs.getInt(7));
-                    pelicula.getDetallePelicula().
-                            setText(rs.getString(8));
-
-                    pelicula.getDetallePelicula().
-                        setPresupuesto(rs.getLong(9));
-                pelicula.getDetallePelicula().
-                        setRecaudacion(rs.getLong(10));
-                pelicula.getDetallePelicula().
-                        setIdioma(rs.getString(11));
+                    satelite.getDetalle().
+                        setId(rs.getInt(7));
+                    satelite.getDetalle().
+                        setVelocidadMaxima(rs.getInt(8));
+                    satelite.getDetalle().
+                        setCombustible(rs.getInt(9));
+                    satelite.getDetalle().
+                        setDiasVidaUtil(rs.getInt(10));
             }
         }catch (Exception e){
             printError(e);
         }finally {
             motorSQL.close();
         }
-        return pelicula;
+        return satelite;
     }
 
     /*
@@ -377,36 +324,35 @@ public class SateliteDAOImpl
      * =========================
      */
 
-    private Pelicula mapPelicula(
+    private Satelite mapSatelite(
             ResultSet rs)
             throws Exception {
 
-        Pelicula pelicula =
-                new Pelicula();
+        Satelite satelite =
+                new Satelite();
 
-        pelicula.setId(
+        satelite.setId(
                 rs.getInt("id"));
 
-        pelicula.setTitulo(
-                rs.getString("titulo"));
+        satelite.setNombre(
+                rs.getString("nombre"));
 
-        pelicula.setDirector(
-                rs.getString("director"));
+        satelite.setOrbita(
+                rs.getString("orbita"));
 
-        pelicula.setGenero(
-                rs.getString("genero"));
+        satelite.setPeso(
+                rs.getInt("peso"));
 
-        pelicula.setAnyo(
-                rs.getInt("anyo"));
+        satelite.setCoste(
+                rs.getInt("coste"));
 
-        pelicula.setDuracion(
-                rs.getInt("duracion"));
+        satelite.setActivo(
+                rs.getBoolean("activo"));
 
-        return pelicula;
+        return satelite;
     }
 public static void main(String[] args){
-        PeliculaDAOImpl peliculaDAO =
-                new PeliculaDAOImpl(MotorFactory.
+    SateliteDAOImpl sateliteDAO = new SateliteDAOImpl(MotorFactory.
                         create(MotorFactory.ORACLE));
 }
 

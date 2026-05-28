@@ -67,6 +67,9 @@ public class Satelite {
         this.agencia = agencia;
     }
     public DetalleSatelite getDetalle() {
+        if(detalle == null){
+            detalle = new DetalleSatelite();
+        }
         return detalle;
     }
     public void setDetalle(DetalleSatelite detalle) {
